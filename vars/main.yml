@@ -1,0 +1,85 @@
+---
+# vars/main.yml (nginxv3)
+# Prefix : nginxv3
+
+### nginx.conf の設定 (デフォルト値) ##################################################
+## main コンテキスト
+nginxv3_defaults_conf_main:
+  - { key: "user", value: "www-data" }
+  - { key: "worker_processes", value: "auto" }
+  - { key: "worker_rlimit_nofile", value: "1000000" }
+  - { key: "error_log", value: "/var/log/nginx/error.log  warn" }
+  - { key: "pid", value: "/var/run/nginx.pid" }
+  - { key: "pcre_jit", value: "on" }
+nginxv3_merged_conf_main: >-
+  {{ (nginxv3_defaults_conf_main + nginxv3_conf_main) | combine_dict_list }}
+
+
+## events コンテキスト
+nginxv3_defaults_conf_events:
+  - { key: "worker_connections", value: "65535" }
+  - { key: "use", value: "epoll" }
+nginxv3_merged_conf_events: >-
+  {{ (nginxv3_defaults_conf_events + nginxv3_conf_events) | combine_dict_list }}
+
+
+## http コンテキスト
+nginxv3_defaults_conf_http:
+  - { key: "sendfile", value: "on" }
+  - { key: "tcp_nopush", value: "on" }
+  - { key: "tcp_nodelay", value: "on" }
+  - { key: "charset", value: "UTF-8" }
+  - { key: "keepalive_timeout", value: "300" }
+  - { key: "keepalive_requests", value: "1000000" }
+  - { key: "keepalive_disable", value: "none" }
+  - { key: "msie_padding", value: "off" }
+  - { key: "client_max_body_size", value: "64m" }
+  - { key: "types_hash_max_size", value: "2048" }
+  - { key: "server_tokens", value: "off" }
+  - { key: "include", value: "/etc/nginx/mime.types", merge_mode: "append" }
+  - key: "types"
+    value: |-
+      {
+        image/avif avif;
+      }
+    eol: ""
+  - { key: "default_type", value: "application/octet-stream" }
+  - { key: "access_log", value: "/var/log/nginx/access.log" }
+  - { key: "gzip", value: "on" }
+  - { key: "gzip_min_length", value: "1024" }
+  - { key: "gzip_comp_level", value: "6" }
+  - key: "gzip_types"
+    value: >-
+      text/plain
+      text/css
+      application/json
+      application/x-javascript
+      text/javascript
+      application/javascript
+      application/protobuf
+      application/x-protobuf
+  - { key: "brotli", value: "on" }
+  - key: "brotli_types"
+    value: >-
+      text/css
+      text/javascript
+      application/javascript
+  - { key: "brotli_min_length", value: "1024" }
+  - { key: "brotli_comp_level", value: "6" }
+  - { key: "open_file_cache", value: "max=1000000" }
+  - { key: "include", value: "/etc/nginx/conf.d/*.conf", merge_mode: "append" }
+  - { key: "vhost_traffic_status_zone", value: "" }
+nginxv3_merged_conf_http: >-
+  {{ (nginxv3_defaults_conf_http + nginxv3_conf_http) | combine_dict_list }}
+
+
+## mail コンテキスト
+nginxv3_defaults_conf_mail: []
+nginxv3_merged_conf_mail: >-
+  {{ (nginxv3_defaults_conf_mail + nginxv3_conf_mail) | combine_dict_list }}
+
+
+## stream コンテキスト
+nginxv3_defaults_conf_stream: []
+nginxv3_merged_conf_stream: >-
+  {{ (nginxv3_defaults_conf_stream + nginxv3_conf_stream) | combine_dict_list }}

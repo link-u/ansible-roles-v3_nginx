@@ -1,0 +1,34 @@
+---
+# defaults/main.yml (nginxv3)
+# Prefix : nginxv3
+
+### インストール時の基本設定 ##########################################################
+nginxv3_install_flag: yes       # インストールフラグ (no 場合, configure タスクのみ実行)
+nginxv3_use_dummy_vhost: yes    # dummy の vhost を使用するかどうか (デフォルトでは yes)
+
+
+### nginx.conf の設定 ################################################################
+# * nginx に関する基本的な設定を構成する.
+# * nginx.conf については基本的に個々の変数で設定する.
+# * それぞれの変数のデフォルト値は vars/main.yml で定義.
+
+## main コンテキスト
+nginxv3_conf_main: []
+nginxv3_conf_main_raw: null
+
+## events コンテキスト
+nginxv3_conf_events: []
+nginxv3_conf_events_raw: null
+
+## http コンテキスト
+nginxv3_conf_http: []
+nginxv3_conf_http_raw: null
+
+## mail コンテキスト
+nginxv3_conf_mail: []
+nginxv3_conf_mail_raw: null
+
+## stream コンテキスト
+nginxv3_conf_stream: []
+nginxv3_conf_stream_raw: null
+
