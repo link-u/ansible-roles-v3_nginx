@@ -59,7 +59,7 @@
             force: yes
           loop: "{{ ssl_conf.value.certificate_list }}"
 
-        - name: "Create dummy cert"
+        - name: "Create dummy certs"
           openssl_certificate:
             path: "{{ ssl_conf.value.dest_dir ~ '/' ~ item.crt_file }}"
             csr_path: "/tmp/{{ ('dummy.example.com_req.csr_' ~ item.key_file) | b64encode | quote }}"
