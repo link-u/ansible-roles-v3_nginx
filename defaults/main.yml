@@ -9,6 +9,9 @@ nginxv3_extra_directories: []   # 追加で作成するディレクトリ
 nginxv3_ssl_confs: {}           # SSL 証明書に関する設定
 nginxv3_backlog_ipv4: {}        # nginx の backlog の設定 (Ipv4)
 nginxv3_backlog_ipv6: {}        # nginx の backlog の設定 (Ipv6)
+nginxv3_vhost_src_dir: >-       # ユーザ定義の nginx の vhost ファイルのソースディレクトリ
+  {{ (playbook_dir ~ '/files/nginx/conf.d') | realpath }}
+nginxv3_vhost_list: []          # ユーザ定義の nginx の vhost ファイル名リスト
 
 
 ### nginx.conf の設定 ################################################################
