@@ -19,6 +19,18 @@
   loop_control:
     loop_var: "ssl_conf"
 
+- name: "Create DH-parameter"
+  openssl_dhparam:
+    path: "{{ item.value.dest_dir ~ '/' ~ item.value.dhparam.file }}"
+    size: "{{ item.value.dhparam.size | default('2048') }}"
+    owner: "root"
+    group: "root"
+    mode: "0600"
+    force: no
+  when: "item.value.dhparam is not none"
+  loop: "{{ nginxv3_merged_ssl_confs | dict2items }}"
+  notify: "nginxv3 reload nginx"
+
 - name: "Set nginx.conf"
   template:
     src: "nginx.conf.j2"

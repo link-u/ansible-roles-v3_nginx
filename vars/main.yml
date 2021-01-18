@@ -43,7 +43,9 @@ nginxv3_defaults_ssl_confs:
   dummy_example_com:
     src_dir: null
     dest_dir: "/etc/nginx/ssl/dummy_example_com/"
-    dhparam_file: "dhparam2048.pem"
+    dhparam:
+      file: "dhparam2048.pem"
+      size: "2048"
     certificate_list:
       - crt_file: "rsa/fullchain.pem"
         key_file: "rsa/privkey.pem"
