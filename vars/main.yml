@@ -2,6 +2,20 @@
 # vars/main.yml (nginxv3)
 # Prefix : nginxv3
 
+### インストール時の基本設定 (デフォルト値) ############################################
+nginxv3_defaults_create_directories:
+  - { path: "/etc/nginx/conf.d/", mode: "0755" }
+  - { path: "/etc/nginx/ssl/", mode: "0755" }
+nginxv3_all_create_directories: >-
+  {{ nginxv3_defaults_create_directories + nginxv3_extra_directories }}
+
+
+### nginx.conf 内の特定の key に対するエイリアス用の変数 ################################
+#   * 設定ファイル用の変数から探し出すのを省略するための変数.
+#   * 呼び出し専用.
+nginxv3_user: "{{ (nginxv3_merged_conf_main | search_from_dict_list('user'))[0] }}"
+
+
 ### nginx.conf の設定 (デフォルト値) ##################################################
 ## main コンテキスト
 nginxv3_defaults_conf_main:
