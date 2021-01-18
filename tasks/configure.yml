@@ -11,6 +11,13 @@
     group: "{{ item.group | default('root') }}"
   loop: "{{ nginxv3_all_create_directories }}"
 
+- name: "Create dummy ssl"
+  include_tasks: "create_dummy_ssl_keys.yml"
+  loop_control:
+    loop_var: "ssl_conf"
+  when: "ssl_conf.value.src_dir is none"
+  loop: "{{ nginxv3_merged_ssl_confs | dict2items }}"
+
 - name: "Set nginx.conf"
   template:
     src: "nginx.conf.j2"

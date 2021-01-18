@@ -9,6 +9,18 @@ nginxv3_defaults_create_directories:
 nginxv3_all_create_directories: >-
   {{ nginxv3_defaults_create_directories + nginxv3_extra_directories }}
 
+### SSL 証明書ファイルに関する設定 (デフォルト値) #######################################
+nginxv3_defaults_ssl_confs:
+  dummy_example_com:
+    src_dir: null
+    dest_dir: "/etc/nginx/ssl/dummy_example_com/"
+    dhparam_file: "dhparam2048.pem"
+    certificate_list:
+      - crt_file: "rsa/fullchain.pem"
+        key_file: "rsa/privkey.pem"
+nginxv3_merged_ssl_confs: >-
+  {{ nginxv3_defaults_ssl_confs | combine(nginxv3_ssl_confs, recursive=True) }}
+
 
 ### nginx.conf 内の特定の key に対するエイリアス用の変数 ################################
 #   * 設定ファイル用の変数から探し出すのを省略するための変数.

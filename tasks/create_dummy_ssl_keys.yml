@@ -1,0 +1,72 @@
+---
+# tasks/create_dummy_ssl_keys.yml (nginxv3)
+# Prefix : nginxv3
+
+- name: "Create dummy ssl"
+  vars:
+    # ssl_conf.value.certificate_list をフラットなリストに変換
+    __key_and_crt_file_list: |
+      {% set __result_list = [] %}
+      {% for item in ssl_conf.value.certificate_list %}
+      {%   set _ = __result_list.append(item.crt_file) %}
+      {%   set _ = __result_list.append(item.key_file) %}
+      {% endfor %}
+      {{ __result_list }}
+  block:
+    - name: "Create directories for cert or key files"
+      file:
+        path: "{{ (ssl_conf.value.dest_dir ~ '/' ~ item) | dirname }}"
+        state: "directory"
+        owner: "root"
+        group: "root"
+        mode: "0755"
+      loop: "{{ __key_and_crt_file_list }}"
+
+    ## 秘密鍵と証明書ファイルの存在確認
+    - name: "Check existing SSL certificate"
+      stat:
+        path: "{{ ssl_conf.value.dest_dir ~ '/' ~ item }}"
+      loop: "{{ __key_and_crt_file_list }}"
+      register: "__nginx_check_existing_ssl_cert"
+
+    ## 秘密鍵と証明書のどちらかもしくは両方が欠けている場合, ダミーの秘密鍵と証明書を作成する
+    - name: "Create dummy key and cert"
+      vars:
+        ## 欠けている秘密鍵 or 証明書の個数
+        __num_of_missing_ssl_cert: >-
+          {{ __nginx_check_existing_ssl_cert.results |
+            selectattr('stat.exists', 'eq', false) | list | length }}
+      when:
+        - (__num_of_missing_ssl_cert | int) != 0
+      block:
+        - name: "Create dummy keys"
+          openssl_privatekey:
+            path: "{{ ssl_conf.value.dest_dir ~ '/' ~ item.key_file }}"
+            owner: "root"
+            group: "root"
+            mode: "0600"
+            force: yes
+          loop: "{{ ssl_conf.value.certificate_list }}"
+
+        - name: "Create dummy csr"
+          openssl_csr:
+            path: "/tmp/{{ ('dummy.example.com_req.csr_' ~ item.key_file) | b64encode | quote }}"
+            privatekey_path: "{{ ssl_conf.value.dest_dir ~ '/' ~ item.key_file }}"
+            common_name: "dummy.example.com"
+            owner: "root"
+            group: "root"
+            mode: "0644"
+            force: yes
+          loop: "{{ ssl_conf.value.certificate_list }}"
+
+        - name: "Create dummy cert"
+          openssl_certificate:
+            path: "{{ ssl_conf.value.dest_dir ~ '/' ~ item.crt_file }}"
+            csr_path: "/tmp/{{ ('dummy.example.com_req.csr_' ~ item.key_file) | b64encode | quote }}"
+            privatekey_path: "{{ ssl_conf.value.dest_dir ~ '/' ~ item.key_file }}"
+            provider: "selfsigned"
+            owner: "root"
+            group: "root"
+            mode: "0644"
+            force: yes
+          loop: "{{ ssl_conf.value.certificate_list }}"
