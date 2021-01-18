@@ -25,6 +25,21 @@
     mode: "0644"
   notify: "nginxv3 reload nginx"
 
+- name: "Set vhost for dummy"
+  template:
+    src: "vhost_dummy.conf.j2"
+    dest: "/etc/nginx/conf.d/dummy.conf"
+    mode: "0644"
+  when: nginxv3_use_dummy_vhost | bool
+  notify: "nginxv3 reload nginx"
+
+- name: "Not use dummy.conf"
+  file:
+    path: "/etc/nginx/conf.d/dummy.conf"
+    state: "absent"
+  when: not nginxv3_use_dummy_vhost | bool
+  notify: "nginxv3 reload nginx"
+
 - name: "Check nginx conf file syntax"
   command: "nginx -t"
   register: _check_nginx_syntax

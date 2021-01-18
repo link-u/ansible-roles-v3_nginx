@@ -1,0 +1,16 @@
+## 未定義のサーバ名を受けるダミーのバーチャルホスト
+
+server {
+    listen 80  default_server;
+    listen 443 default_server ssl http2;
+
+    listen [::]:80  default_server;
+    listen [::]:443 default_server ssl http2;
+
+{% for item in nginxv3_merged_ssl_confs.dummy_example_com.certificate_list %}
+    ssl_certificate      {{ (nginxv3_merged_ssl_confs.dummy_example_com.dest_dir ~ item.crt_file) | realpath }};
+    ssl_certificate_key  {{ (nginxv3_merged_ssl_confs.dummy_example_com.dest_dir ~ item.key_file) | realpath }};
+{% endfor %}
+
+    return 444;
+}
