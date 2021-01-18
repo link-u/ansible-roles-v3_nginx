@@ -32,6 +32,7 @@ nginxv3_defaults_backlog_ipv4:
 nginxv3_merged_backlog_ipv4: >-
   {{ nginxv3_defaults_backlog_ipv4 | combine(nginxv3_backlog_ipv4, recursive=True) }}
 
+## nginx の backlog (IPv6)
 nginxv3_defaults_backlog_ipv6:
   80: 511
   443: 511
