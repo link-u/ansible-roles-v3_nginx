@@ -22,8 +22,7 @@ nginxv3_defaults_backlog_ipv6:
 nginxv3_merged_backlog_ipv6: >-
   {{ nginxv3_defaults_backlog_ipv6 | combine(nginxv3_backlog_ipv6, recursive=True) }}
 
-
-### SSL 証明書ファイルに関する設定 (デフォルト値) #######################################
+## SSL 証明書ファイルに関する設定 (デフォルト値)
 nginxv3_defaults_ssl_confs:
   dummy_example_com:
     src_dir: null
