@@ -11,12 +11,13 @@
     group: "{{ item.group | default('root') }}"
   loop: "{{ nginxv3_all_create_directories }}"
 
-- name: "Create dummy ssl"
-  include_tasks: "create_dummy_ssl_keys.yml"
+- name: "Create dummy ssl or Deploy ssl from localhost (your pc)"
+  include_tasks: >-
+    {{ ssl_conf.value.src_dir is none |
+      ternary('create_dummy_ssl_keys.yml', 'deploy_ssl_keys.yml') }}
+  loop: "{{ nginxv3_merged_ssl_confs | dict2items }}"
   loop_control:
     loop_var: "ssl_conf"
-  when: "ssl_conf.value.src_dir is none"
-  loop: "{{ nginxv3_merged_ssl_confs | dict2items }}"
 
 - name: "Set nginx.conf"
   template:
