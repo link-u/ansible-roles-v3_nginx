@@ -40,6 +40,13 @@
   when: not nginxv3_use_dummy_vhost | bool
   notify: "nginxv3 reload nginx"
 
+- name: "Set vhost for backlog"
+  template:
+    src: "vhost_backlog.conf.j2"
+    dest: "/etc/nginx/conf.d/backlog.conf"
+    mode: "0644"
+  notify: "nginxv3 reload nginx"
+
 - name: "Check nginx conf file syntax"
   command: "nginx -t"
   register: _check_nginx_syntax

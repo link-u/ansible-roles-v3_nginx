@@ -1,0 +1,17 @@
+## backlog を設定するためだけのバーチャルホスト
+
+server {
+    server_name backlog.example.com;
+
+{# IPv4 の backlog 用 listen 設定 #}
+{% for item in (nginxv3_merged_backlog_ipv4 | dictsort(by='key')) %}{% set port = item[0] %}{% set backlog = item[1] %}
+    listen {{ port }} {{ ('backlog=' ~ (backlog | string)) | indent(4) }};
+{% endfor %}
+
+{# IPv6 の backlog 用 listen 設定 #}
+{% for item in (nginxv3_merged_backlog_ipv6 | dictsort(by='key')) %}{% set port = item[0] %}{% set backlog = item[1] %}
+    listen [::]:{{ port }} {{ ('backlog=' ~ (backlog | string)) | indent(4) }};
+{% endfor %}
+
+    return 444;
+}
