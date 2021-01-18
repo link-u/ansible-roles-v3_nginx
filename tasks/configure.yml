@@ -11,7 +11,7 @@
     group: "{{ item.group | default('root') }}"
   loop: "{{ nginxv3_all_create_directories }}"
 
-- name: "Create dummy ssl or Deploy ssl from localhost (your pc)"
+- name: '"Create dummy ssl" or "Deploy ssl from localhost (your pc)"'
   include_tasks: >-
     {{ ssl_conf.value.src_dir is none |
       ternary('create_dummy_ssl_keys.yml', 'deploy_ssl_keys.yml') }}
