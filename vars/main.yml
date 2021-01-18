@@ -2,10 +2,26 @@
 # vars/main.yml (nginxv3)
 # Prefix : nginxv3
 
+### nginx.conf 内の特定の key に対するエイリアス用の変数 ################################
+#   設定ファイル用の変数から探し出すのを省略するための変数群.
+#   呼び出しづらい設定をシンプルに呼び出すために使用する.
+#   例えば, nginx.conf に設定される user を Jinja2 とフィルタを駆使する必要がある.
+#   その呼び出しを緩和するためにエイリアスとして設定しておく.
+## nginx の conf.d のディレクトリパス
+nginxv3_conf_dir: >-
+  {{ (nginxv3_all_create_directories | search_from_dict_list('conf_dir', key='name', value='path'))[0] }}
+## nginx の ssl 証明書を保存するディレクトリパス
+nginxv3_ssl_dir: >-
+  {{ (nginxv3_all_create_directories | search_from_dict_list('ssl_dir', key='name', value='path'))[0] }}
+## nginx ユーザ
+nginxv3_user: >-
+  {{ (nginxv3_merged_conf_main | search_from_dict_list('user'))[0] }}
+
+
 ### インストール時の基本設定 (デフォルト値) ############################################
 nginxv3_defaults_create_directories:
-  - { path: "/etc/nginx/conf.d/", mode: "0755" }
-  - { path: "/etc/nginx/ssl/", mode: "0755" }
+  - { path: "/etc/nginx/conf.d/", mode: "0755", name: "conf_dir" }
+  - { path: "/etc/nginx/ssl/", mode: "0755", name: "ssl_dir" }
 nginxv3_all_create_directories: >-
   {{ nginxv3_defaults_create_directories + nginxv3_extra_directories }}
 
@@ -33,12 +49,6 @@ nginxv3_defaults_ssl_confs:
         key_file: "rsa/privkey.pem"
 nginxv3_merged_ssl_confs: >-
   {{ nginxv3_defaults_ssl_confs | combine(nginxv3_ssl_confs, recursive=True) }}
-
-
-### nginx.conf 内の特定の key に対するエイリアス用の変数 ################################
-#   * 設定ファイル用の変数から探し出すのを省略するための変数.
-#   * 呼び出し専用.
-nginxv3_user: "{{ (nginxv3_merged_conf_main | search_from_dict_list('user'))[0] }}"
 
 
 ### nginx.conf の設定 (デフォルト値) ##################################################
