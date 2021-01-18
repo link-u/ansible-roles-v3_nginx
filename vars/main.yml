@@ -42,7 +42,7 @@ nginxv3_merged_backlog_ipv6: >-
 nginxv3_defaults_ssl_confs:
   dummy_example_com:
     src_dir: null
-    dest_dir: "/etc/nginx/ssl/dummy_example_com/"
+    dest_dir: "{{ nginxv3_ssl_dir }}/dummy_example_com/"
     dhparam:
       file: "dhparam2048.pem"
       size: "2048"
@@ -118,7 +118,7 @@ nginxv3_defaults_conf_http:
   - { key: "brotli_min_length", value: "1024" }
   - { key: "brotli_comp_level", value: "6" }
   - { key: "open_file_cache", value: "max=1000000" }
-  - { key: "include", value: "/etc/nginx/conf.d/*.conf", merge_mode: "append" }
+  - { key: "include", value: "{{ nginxv3_conf_dir | realpath }}/*.conf", merge_mode: "append" }
   - { key: "vhost_traffic_status_zone", value: "" }
 nginxv3_merged_conf_http: >-
   {{ (nginxv3_defaults_conf_http + nginxv3_conf_http) | combine_dict_list }}

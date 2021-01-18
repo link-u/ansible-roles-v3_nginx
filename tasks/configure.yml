@@ -21,7 +21,7 @@
 
 - name: "Create DH-parameter"
   openssl_dhparam:
-    path: "{{ item.value.dest_dir ~ '/' ~ item.value.dhparam.file }}"
+    path: "{{ item.value.dest_dir }}/{{ item.value.dhparam.file }}"
     size: "{{ item.value.dhparam.size | default('2048') }}"
     owner: "root"
     group: "root"
@@ -41,14 +41,14 @@
 - name: "Set vhost for dummy"
   template:
     src: "vhost_dummy.conf.j2"
-    dest: "/etc/nginx/conf.d/dummy.conf"
+    dest: "{{ nginxv3_conf_dir }}/dummy.conf"
     mode: "0644"
   when: nginxv3_use_dummy_vhost | bool
   notify: "nginxv3 reload nginx"
 
 - name: "Not use dummy.conf"
   file:
-    path: "/etc/nginx/conf.d/dummy.conf"
+    dest: "{{ nginxv3_conf_dir }}/dummy.conf"
     state: "absent"
   when: not nginxv3_use_dummy_vhost | bool
   notify: "nginxv3 reload nginx"
@@ -56,14 +56,14 @@
 - name: "Set vhost for backlog"
   template:
     src: "vhost_backlog.conf.j2"
-    dest: "/etc/nginx/conf.d/backlog.conf"
+    dest: "{{ nginxv3_conf_dir }}/backlog.conf"
     mode: "0644"
   notify: "nginxv3 reload nginx"
 
 - name: "Set user-defined vhost config file"
   template:
-    src: "{{ nginxv3_vhost_src_dir ~ '/' ~ item }}"
-    dest: "{{ '/etc/nginx/conf.d/' ~ item }}"
+    src:  "{{ nginxv3_vhost_src_dir }}/{{ item }}"
+    dest: "{{ nginxv3_conf_dir }}/{{ item }}"
     mode: "0644"
   loop: "{{ nginxv3_vhost_list }}"
   notify: "nginxv3 reload nginx"
