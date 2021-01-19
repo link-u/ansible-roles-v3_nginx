@@ -1,0 +1,42 @@
+---
+# tasks/deploy_ssl_keys.yml (nginxv3)
+# Prefix : nginxv3
+
+- name: "Create directories for cert or key files"
+  file:
+    path: "{{ (ssl_conf.value.dest_dir ~ '/' ~ item) | dirname }}"
+    state: "directory"
+    owner: "root"
+    group: "root"
+    mode: "0755"
+  vars:
+    # ssl_conf.value.certificate_list をフラットなリストに変換
+    __key_and_crt_file_list: |
+      {% set __result_list = [] %}
+      {% for item in ssl_conf.value.certificate_list %}
+      {%   set _ = __result_list.append(item.crt_file) %}
+      {%   set _ = __result_list.append(item.key_file) %}
+      {% endfor %}
+      {{ __result_list }}
+  loop: "{{ __key_and_crt_file_list }}"
+
+- name: "Deploy ssl keys"
+  copy:
+    src: "{{ ssl_conf.value.src_dir ~ '/' ~ item.key_file }}"
+    dest: "{{ ssl_conf.value.dest_dir ~ '/' ~ item.key_file }}"
+    owner: "root"
+    group: "root"
+    mode: "0600"
+  loop: "{{ ssl_conf.value.certificate_list }}"
+  no_log: yes
+  notify: "nginxv3 reload nginx"
+
+- name: "Deploy ssl certs"
+  copy:
+    src: "{{ ssl_conf.value.src_dir ~ '/' ~ item.crt_file }}"
+    dest: "{{ ssl_conf.value.dest_dir ~ '/' ~ item.crt_file }}"
+    owner: "root"
+    group: "root"
+    mode: "0644"
+  loop: "{{ ssl_conf.value.certificate_list }}"
+  notify: "nginxv3 reload nginx"

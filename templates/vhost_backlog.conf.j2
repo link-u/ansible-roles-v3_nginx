@@ -1,0 +1,11 @@
+## backlog を設定するためだけのバーチャルホスト
+
+server {
+    server_name backlog.example.com;
+
+{% for item in nginxv3_merged_backlog %}
+    listen {{ item.ip_and_port | string }} {{ ('backlog=' ~ (item.backlog | string)) | indent(4) }};
+{% endfor %}
+
+    return 444;
+}

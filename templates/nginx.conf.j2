@@ -1,0 +1,59 @@
+{{ ansible_managed | comment }}
+
+{# main コンテキスト #}
+{% for item in nginxv3_merged_conf_main %}
+{{   item.key }}  {{ item.value }}{{ item.eol | default(';') }}
+{% endfor %}
+
+{# events コンテキスト #}
+{% if ((nginxv3_merged_conf_events | length) != 0) or (nginxv3_conf_events_raw != none) %}
+events {
+{%   for item in nginxv3_merged_conf_events %}
+    {{ item.key }}  {{ item.value | indent(4) }}{{ item.eol | default(';') }}
+{%   endfor %}
+{%   if nginxv3_conf_events_raw != none %}
+    {{ nginxv3_conf_events_raw | indent(4) }}
+{%   endif %}
+}
+{% endif %}
+
+{# http コンテキスト #}
+{% if ((nginxv3_merged_conf_http | length) != 0) or (nginxv3_conf_http_raw != none) %}
+http {
+{%   for item in nginxv3_merged_conf_http %}
+    {{ item.key }}  {{ item.value | indent(4) }}{{ item.eol | default(';') }}
+{%   endfor %}
+{%   if nginxv3_conf_http_raw != none %}
+    {{ nginxv3_conf_http_raw | indent(4) }}
+{%   endif %}
+}
+{% endif %}
+
+{# mail コンテキスト #}
+{% if ((nginxv3_merged_conf_mail | length) != 0) or (nginxv3_conf_mail_raw != none) %}
+mail {
+{%   for item in nginxv3_merged_conf_mail %}
+    {{ item.key }}  {{ item.value | indent(4) }}{{ item.eol | default(';') }}
+{%   endfor %}
+{%   if nginxv3_conf_mail_raw != none %}
+    {{ nginxv3_conf_mail_raw | indent(4) }}
+{%   endif %}
+}
+{% endif %}
+
+{# stream コンテキスト #}
+{% if ((nginxv3_merged_conf_stream | length) != 0) or (nginxv3_conf_stream_raw != none) %}
+stream {
+{% for item in nginxv3_merged_conf_stream %}
+    {{ item.key }}  {{ item.value | indent(4) }}{{ item.eol | default(';') }}
+{% endfor %}
+{%   if nginxv3_conf_stream_raw != none %}
+    {{ nginxv3_conf_stream_raw | indent(4) }}
+{%   endif %}
+}
+{% endif %}
+
+{# main コンテキスト (raw) #}
+{% if nginxv3_conf_main_raw != none %}
+{{   nginxv3_conf_main_raw }}
+{% endif %}

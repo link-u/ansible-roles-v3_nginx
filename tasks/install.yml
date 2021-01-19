@@ -1,0 +1,32 @@
+---
+# tasks/install.yml (nginxv3)
+# Prefix : nginxv3
+
+- name: "Pre-install packages"
+  apt:
+    name: ["gpg", "python3-cryptography"]
+    state: present
+    update_cache: yes
+
+- name: "Trust our package maintainers."
+  apt_key:
+    id: "4DE76DC836A27DBAE17FAC4B09C9B9C18F429AAE"
+    url: "https://pkg.link-u.co.jp/key.asc"
+    state: "present"
+
+- name: "Add our apt repository."
+  apt_repository:
+    repo: "deb https://pkg.link-u.co.jp/{{ ansible_distribution_release }} ./"
+    state: "present"
+
+- name: "Install packages"
+  apt:
+    name: "nginx"
+    state: "present"
+    update_cache: yes
+
+- name: "Install python module for htpasswd"
+  apt:
+    name: "python3-passlib"
+    update_cache: yes
+    state: "present"

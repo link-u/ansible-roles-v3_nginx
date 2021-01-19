@@ -1,0 +1,132 @@
+---
+# vars/main.yml (nginxv3)
+# Prefix : nginxv3
+
+### nginx.conf 内の特定の key に対するエイリアス用の変数 ################################
+#   設定ファイル用の変数から探し出すのを省略するための変数群.
+#   呼び出しづらい設定をシンプルに呼び出すために使用する.
+#   例えば, nginx.conf に設定される user を Jinja2 とフィルタを駆使する必要がある.
+#   その呼び出しを緩和するためにエイリアスとして設定しておく.
+## nginx の conf.d のディレクトリパス
+nginxv3_conf_dir: >-
+  {{ (nginxv3_all_create_directories | search_from_dict_list('conf_dir', key='name', value='path'))[0] }}
+## nginx の ssl 証明書を保存するディレクトリパス
+nginxv3_ssl_dir: >-
+  {{ (nginxv3_all_create_directories | search_from_dict_list('ssl_dir', key='name', value='path'))[0] }}
+## nginx ユーザ
+nginxv3_user: >-
+  {{ (nginxv3_merged_conf_main | search_from_dict_list('user'))[0] }}
+
+
+### インストール時の基本設定 (デフォルト値) ############################################
+nginxv3_defaults_create_directories:
+  - { path: "/etc/nginx/conf.d/", mode: "0755", name: "conf_dir" }
+  - { path: "/etc/nginx/ssl/", mode: "0755", name: "ssl_dir" }
+nginxv3_all_create_directories: >-
+  {{ nginxv3_defaults_create_directories + nginxv3_extra_directories }}
+
+## nginx の backlog 設定
+nginxv3_defaults_backlog:
+  - { ip_and_port: "80", backlog: 511 }
+  - { ip_and_port: "443", backlog: 511 }
+  - { ip_and_port: "[::]:80", backlog: 511 }
+  - { ip_and_port: "[::]:443", backlog: 511 }
+nginxv3_merged_backlog: >-
+  {{ (nginxv3_defaults_backlog + nginxv3_backlog) | combine_dict_list(key='ip_and_port') }}
+
+## SSL 証明書ファイルに関する設定 (デフォルト値)
+nginxv3_defaults_ssl_confs:
+  dummy_example_com:
+    src_dir: null
+    dest_dir: "{{ nginxv3_ssl_dir }}/dummy_example_com/"
+    dhparam:
+      file: "dhparam2048.pem"
+      size: "2048"
+    certificate_list:
+      - crt_file: "rsa/fullchain.pem"
+        key_file: "rsa/privkey.pem"
+nginxv3_merged_ssl_confs: >-
+  {{ nginxv3_defaults_ssl_confs | combine(nginxv3_ssl_confs, recursive=True) }}
+
+
+### nginx.conf の設定 (デフォルト値) ##################################################
+## main コンテキスト
+nginxv3_defaults_conf_main:
+  - { key: "user", value: "www-data" }
+  - { key: "worker_processes", value: "auto" }
+  - { key: "worker_rlimit_nofile", value: "1000000" }
+  - { key: "error_log", value: "/var/log/nginx/error.log  warn" }
+  - { key: "pid", value: "/var/run/nginx.pid" }
+  - { key: "pcre_jit", value: "on" }
+nginxv3_merged_conf_main: >-
+  {{ (nginxv3_defaults_conf_main + nginxv3_conf_main) | combine_dict_list }}
+
+
+## events コンテキスト
+nginxv3_defaults_conf_events:
+  - { key: "worker_connections", value: "65535" }
+  - { key: "use", value: "epoll" }
+nginxv3_merged_conf_events: >-
+  {{ (nginxv3_defaults_conf_events + nginxv3_conf_events) | combine_dict_list }}
+
+
+## http コンテキスト
+nginxv3_defaults_conf_http:
+  - { key: "sendfile", value: "on" }
+  - { key: "tcp_nopush", value: "on" }
+  - { key: "tcp_nodelay", value: "on" }
+  - { key: "charset", value: "UTF-8" }
+  - { key: "keepalive_timeout", value: "300" }
+  - { key: "keepalive_requests", value: "1000000" }
+  - { key: "keepalive_disable", value: "none" }
+  - { key: "msie_padding", value: "off" }
+  - { key: "client_max_body_size", value: "64m" }
+  - { key: "types_hash_max_size", value: "2048" }
+  - { key: "server_tokens", value: "off" }
+  - { key: "include", value: "/etc/nginx/mime.types", merge_mode: "append" }
+  - key: "types"
+    value: |-
+      {
+        image/avif avif;
+      }
+    eol: ""
+  - { key: "default_type", value: "application/octet-stream" }
+  - { key: "access_log", value: "/var/log/nginx/access.log" }
+  - { key: "gzip", value: "on" }
+  - { key: "gzip_min_length", value: "1024" }
+  - { key: "gzip_comp_level", value: "6" }
+  - key: "gzip_types"
+    value: >-
+      text/plain
+      text/css
+      application/json
+      application/x-javascript
+      text/javascript
+      application/javascript
+      application/protobuf
+      application/x-protobuf
+  - { key: "brotli", value: "on" }
+  - key: "brotli_types"
+    value: >-
+      text/css
+      text/javascript
+      application/javascript
+  - { key: "brotli_min_length", value: "1024" }
+  - { key: "brotli_comp_level", value: "6" }
+  - { key: "open_file_cache", value: "max=1000000" }
+  - { key: "include", value: "{{ nginxv3_conf_dir | realpath }}/*.conf", merge_mode: "append" }
+  - { key: "vhost_traffic_status_zone", value: "" }
+nginxv3_merged_conf_http: >-
+  {{ (nginxv3_defaults_conf_http + nginxv3_conf_http) | combine_dict_list }}
+
+
+## mail コンテキスト
+nginxv3_defaults_conf_mail: []
+nginxv3_merged_conf_mail: >-
+  {{ (nginxv3_defaults_conf_mail + nginxv3_conf_mail) | combine_dict_list }}
+
+
+## stream コンテキスト
+nginxv3_defaults_conf_stream: []
+nginxv3_merged_conf_stream: >-
+  {{ (nginxv3_defaults_conf_stream + nginxv3_conf_stream) | combine_dict_list }}
