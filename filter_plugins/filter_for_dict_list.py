@@ -10,7 +10,7 @@ class FilterModule(object):
     def combine_dict_list(self, dict_list: list, key: str = 'key') -> list:
         result_list = []
         for item in dict_list:
-            i = self.search(result_list, item[key])
+            i = self.search(result_list, item[key], key)
             merge_mode = self.get(item, 'merge_mode')
             if merge_mode == 'append' or i == -1:
                 result_list.append(item)
