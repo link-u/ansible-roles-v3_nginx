@@ -68,8 +68,7 @@ nginx をインストールする role です.
 | [`nginxv3_use_dummy_vhost`](#nginxv3_use_dummy_vhost) |  デフォルト値: `yes` <br> [dummy の vhost](templates/vhost_dummy.conf.j2) を使用するかどうか  |
 | [`nginxv3_extra_directories`](#nginxv3_extra_directories) | デフォルト値はリンク先参照 <br> 追加で作成するディレクトリリスト |
 | [`nginxv3_ssl_confs`](#nginxv3_ssl_confs) | デフォルト値はリンク先参照 <br> SSL 証明書に関する設定 |
-| [`nginxv3_backlog_ipv4`](#nginxv3_backlog) | デフォルト値はリンク先参照 <br> nginx の backlog の設定 (IPv4) |
-| [`nginxv3_backlog_ipv6`](#nginxv3_backlog) | デフォルト値はリンク先参照 <br> nginx の backlog の設定 (IPv6) |
+| [`nginxv3_backlog`](#nginxv3_backlog) | デフォルト値はリンク先参照 <br> nginx の backlog の設定 |
 | [`nginxv3_vhost_src_dir`](#nginxv3_vhost_src_dir) |  デフォルト値: `{{ playbook_dir }}/files/nginx/conf.d` <br> ユーザ定義の nginx の vhost ファイルのソースディレクトリ  |
 | [`nginxv3_vhost_list`](#nginxv3_vhost_list) | デフォルト値: `[]` <br> ユーザ定義の nginx の vhost ファイル名リスト |
 
@@ -185,45 +184,33 @@ nginx をインストールする role です.
 
 <br>
 
-* **nginxv3_backlog_ipv4 と nginxv3_backlog_ipv6**<a name="nginxv3_backlog"></a>
+* **nginxv3_backlog**<a name="nginxv3_backlog"></a>
 
   Syntax
   ```yaml
   ## IPv4 の backlog 設定
   nginxv3_backlog_ipv4:
-    <port number1>: <backlog number1>  # key が port 番号, value が backlog
-    <port number2>: <backlog number2>
+    - ip_and_port: "[<IP address>:]<port number>"   # IP アドレスとポート番号の組を設定する (IP アドレスを省略すると 0.0.0.0 となる.).
+      backlog: <backlog>                            # backlog の値
     ...
-
-  ## IPv6 の backlog 設定
-  nginxv3_backlog_ipv6:
-    <port number1>: <backlog number1>  # key が port 番号, value が backlog
-    <port number2>: <backlog number2>
   ```
 
   Default value<br>
-  デフォルト値は [vars/main.yml](vars/main.yml) の `nginxv3_defaults_backlog_ipv4` と `nginxv3_defaults_backlog_ipv6` に書かれている値.
+  デフォルト値は [vars/main.yml](vars/main.yml) の `nginxv3_defaults_backlog` に書かれている値.
   ```yaml
-  ## IPv4
-  nginxv3_defaults_backlog_ipv4:
-    80: 511
-    443: 511
-
-  ## IPv6
-  nginxv3_defaults_backlog_ipv6:
-    80: 511
-    443: 511
-  ``` 
+  nginxv3_defaults_backlog:
+    - { ip_and_port: "80", backlog: 511 }
+    - { ip_and_port: "443", backlog: 511 }
+    - { ip_and_port: "[::]:80", backlog: 511 }
+    - { ip_and_port: "[::]:443", backlog: 511 }
+  ```
 
   Example
   ```yaml
-  nginxv3_backlog_ipv4:
-    80: 1000
-    443: 60000
-    8080: 100
-
-  nginxv3_backlog_ipv6:
-    443: 60000
+  nginxv3_backlog:
+    - { ip_and_port: "443", backlog: 60000 }
+    - { ip_and_port: "127.0.0.1:8080", backlog: 100 }
+    - { ip_and_port: "[::1]:8080", backlog: 100 }
   ```
 
 <br>
