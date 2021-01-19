@@ -228,7 +228,7 @@ nginx をインストールする role です.
 
   ansible の template でデプロイします.<br>
   そのため conf ファイル内で Jinja2 が使えます.<br>
-  `{{ nginxv3_vhost_src_dir }}/{{ nginxv3_vhost_list[n] }}` というファイルパスで設置します.
+  `{{ nginxv3_vhost_src_dir }}/{{ nginxv3_vhost_list[n] }}` というファイルパスに用意してください.
 
   Syntax
   ```yaml
