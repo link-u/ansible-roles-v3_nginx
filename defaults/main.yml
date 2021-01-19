@@ -1,6 +1,7 @@
 ---
 # defaults/main.yml (nginxv3)
 # Prefix : nginxv3
+# 詳細な説明は README.md を見てください.
 
 ### インストール時の基本設定 ##########################################################
 nginxv3_install_flag: yes       # インストールフラグ (no 場合, configure タスクのみ実行)
