@@ -247,6 +247,12 @@ nginx をインストールする role です.
     - "piyo.conf"
   ```
 
+  そして, 以下のように vhost conf ファイルを用意しておく.
+  * `{{ nginxv3_vhost_src_dir }}/hoge.conf`
+  * `{{ nginxv3_vhost_src_dir }}/fuga.conf`
+  * `{{ nginxv3_vhost_src_dir }}/piyo.conf`
+  
+
 <br>
 
 ### 4.3. nginx.conf の設定用の変数
