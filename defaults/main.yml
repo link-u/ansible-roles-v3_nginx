@@ -7,8 +7,7 @@ nginxv3_install_flag: yes       # インストールフラグ (no 場合, config
 nginxv3_use_dummy_vhost: yes    # dummy の vhost を使用するかどうか (デフォルトでは yes)
 nginxv3_extra_directories: []   # 追加で作成するディレクトリ
 nginxv3_ssl_confs: {}           # SSL 証明書に関する設定
-nginxv3_backlog_ipv4: {}        # nginx の backlog の設定 (IPv4)
-nginxv3_backlog_ipv6: {}        # nginx の backlog の設定 (IPv6)
+nginxv3_backlog: []             # nginx の backlog の設定
 nginxv3_vhost_src_dir: >-       # ユーザ定義の nginx の vhost ファイルのソースディレクトリ
   {{ (playbook_dir ~ '/files/nginx/conf.d') | realpath }}
 nginxv3_vhost_list: []          # ユーザ定義の nginx の vhost ファイル名リスト
