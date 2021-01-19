@@ -4,7 +4,7 @@
 
 ### インストール時の基本設定 ##########################################################
 nginxv3_install_flag: yes       # インストールフラグ (no 場合, configure タスクのみ実行)
-nginxv3_use_dummy_vhost: yes    # dummy の vhost を使用するかどうか (デフォルトでは yes)
+nginxv3_use_dummy_vhost: no     # dummy の vhost を使用するかどうか (デフォルトでは no)
 nginxv3_extra_directories: []   # 追加で作成するディレクトリ
 nginxv3_ssl_confs: {}           # SSL 証明書に関する設定
 nginxv3_backlog: []             # nginx の backlog の設定

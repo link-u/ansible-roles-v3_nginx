@@ -65,7 +65,7 @@ nginx をインストールする role です.
 | 変数 | 説明 |
 | :-- | :-- |
 | [`nginxv3_install_flag`](#nginxv3_install_flag) |  デフォルト値: `yes` <br> インストールフラグ (no 場合, [configure.yml](tasks/configure.yml) タスクのみ実行) |
-| [`nginxv3_use_dummy_vhost`](#nginxv3_use_dummy_vhost) |  デフォルト値: `yes` <br> [dummy の vhost](templates/vhost_dummy.conf.j2) を使用するかどうか  |
+| [`nginxv3_use_dummy_vhost`](#nginxv3_use_dummy_vhost) |  デフォルト値: `no` <br> [dummy の vhost](templates/vhost_dummy.conf.j2) を使用するかどうか  |
 | [`nginxv3_extra_directories`](#nginxv3_extra_directories) | デフォルト値はリンク先参照 <br> 追加で作成するディレクトリリスト |
 | [`nginxv3_ssl_confs`](#nginxv3_ssl_confs) | デフォルト値はリンク先参照 <br> SSL 証明書に関する設定 |
 | [`nginxv3_backlog`](#nginxv3_backlog) | デフォルト値はリンク先参照 <br> nginx の backlog の設定 |
