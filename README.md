@@ -293,8 +293,8 @@ nginx をインストールする role です.
 Syntax
 ```yaml
 <var name>:                      # コンテキストを設定する変数名
-  - key: "<key name>"            # (必須) main コンテキストの key
-    value: "<value name>"        # (必須) main コンテキストの value
+  - key: "<key name>"            # (必須) コンテキストの key.
+    value: "<value name>"        # (必須) コンテキストの value. value = null の時設定を無効にできる.
     merge_mode: "<merge mode>"   # (オプション) 設定を追加するときの動作モード. デフォルトでは 'update'
                                  #             'update': 該当する key について
                                  #                       存在すれば設定をを上書きし,
@@ -322,6 +322,7 @@ nginxv3_conf_main: "{{ _all_nginxv3_conf_main + _nginxv3_conf_main }}"
 _nginxv3_conf_main:
   - { key: "worker_processes", value: "200" }
   - { key: "worker_rlimit_nofile", value: "1000000" }
+  - { key: "pcre_jit", value: null }
 ```
 
 この時, production に所属していない all グループの nginx.conf は
@@ -336,7 +337,6 @@ events {
 となるのに対して, production グループでは
 ```
 worker_processes  200;
-pcre_jit  on;
 worker_rlimit_nofile  1000000;
 
 events {
