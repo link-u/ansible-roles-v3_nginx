@@ -302,6 +302,8 @@ Syntax
                                  #             'append': 設定をリストの最後に付け足す. (key の重複が可能)
     eol: "<end of line>"         # (オプション) 末尾につける文字列. デフォルトでは ';'
                                  #             殆どの場合デフォルトのままで良い.
+    align_indent: <align inden>  # (オプション) yes の時 value のインデントを揃える
+                                 #             デフォルトでは no
 ```
 
 <br>
@@ -414,6 +416,36 @@ http {
 
 <br>
 
+**Example 4. : align_indent を使う**<br>
+`log_format` のように `value` のインデントを揃える必要がある場合は `align_indent=yes` を使うことで対応できます.
+```yaml
+nginxv3_conf_http:
+  - key: "log_format compression"
+    align_indent: yes
+    value: |-
+      '$remote_addr - $remote_user [$time_local] '
+      '"$request" $status $bytes_sent '
+      '"$http_referer" "$http_user_agent" "$gzip_ratio"'
+```
+
+と設定すると
+
+```
+http {
+    ...
+
+    log_format compression  '$remote_addr - $remote_user [$time_local] '
+                            '"$request" $status $bytes_sent '
+                            '"$http_referer" "$http_user_agent" "$gzip_ratio"';
+
+    ...
+}
+```
+
+のように nginx.conf 反映されます.
+
+<br>
+
 #### 4.3.3. コンテキストを直接設定する変数の書き方
 
 名前の末尾に `_raw` とついている変数群です.<br>
@@ -461,7 +493,7 @@ http {
 }
 ```
 
-のように nginx.conf 反映される.
+のように nginx.conf 反映されます.
 
 <br>
 

@@ -2,14 +2,20 @@
 
 {# main コンテキスト #}
 {% for item in nginxv3_merged_conf_main %}
-{{   item.key }}  {{ item.value }}{{ item.eol | default(';') }}
+{%   set key_length = (item.key | length) %}
+{%   set align_indent = (item.align_indent | default(false)) %}
+{%   set indent_length = (align_indent | ternary(2 + key_length, 0) ) %}
+{{   item.key }}  {{ item.value | indent(indent_length) }}{{ item.eol | default(';') }}
 {% endfor %}
 
 {# events コンテキスト #}
 {% if ((nginxv3_merged_conf_events | length) != 0) or (nginxv3_conf_events_raw != none) %}
 events {
 {%   for item in nginxv3_merged_conf_events %}
-    {{ item.key }}  {{ item.value | indent(4) }}{{ item.eol | default(';') }}
+{%     set key_length = (item.key | length) %}
+{%     set align_indent = (item.align_indent | default(false)) %}
+{%     set indent_length = (align_indent | ternary(2 + key_length, 0) ) %}
+    {{ item.key }}  {{ item.value | indent(4 + indent_length) }}{{ item.eol | default(';') }}
 {%   endfor %}
 {%   if nginxv3_conf_events_raw != none %}
     {{ nginxv3_conf_events_raw | indent(4) }}
@@ -21,7 +27,10 @@ events {
 {% if ((nginxv3_merged_conf_http | length) != 0) or (nginxv3_conf_http_raw != none) %}
 http {
 {%   for item in nginxv3_merged_conf_http %}
-    {{ item.key }}  {{ item.value | indent(4) }}{{ item.eol | default(';') }}
+{%     set key_length = (item.key | length) %}
+{%     set align_indent = (item.align_indent | default(false)) %}
+{%     set indent_length = (align_indent | ternary(2 + key_length, 0) ) %}
+    {{ item.key }}  {{ item.value | indent(4 + indent_length) }}{{ item.eol | default(';') }}
 {%   endfor %}
 {%   if nginxv3_conf_http_raw != none %}
     {{ nginxv3_conf_http_raw | indent(4) }}
@@ -33,7 +42,10 @@ http {
 {% if ((nginxv3_merged_conf_mail | length) != 0) or (nginxv3_conf_mail_raw != none) %}
 mail {
 {%   for item in nginxv3_merged_conf_mail %}
-    {{ item.key }}  {{ item.value | indent(4) }}{{ item.eol | default(';') }}
+{%     set key_length = (item.key | length) %}
+{%     set align_indent = (item.align_indent | default(false)) %}
+{%     set indent_length = (align_indent | ternary(2 + key_length, 0) ) %}
+    {{ item.key }}  {{ item.value | indent(4 + indent_length) }}{{ item.eol | default(';') }}
 {%   endfor %}
 {%   if nginxv3_conf_mail_raw != none %}
     {{ nginxv3_conf_mail_raw | indent(4) }}
@@ -45,7 +57,10 @@ mail {
 {% if ((nginxv3_merged_conf_stream | length) != 0) or (nginxv3_conf_stream_raw != none) %}
 stream {
 {% for item in nginxv3_merged_conf_stream %}
-    {{ item.key }}  {{ item.value | indent(4) }}{{ item.eol | default(';') }}
+{%     set key_length = (item.key | length) %}
+{%     set align_indent = (item.align_indent | default(false)) %}
+{%     set indent_length = (align_indent | ternary(2 + key_length, 0) ) %}
+    {{ item.key }}  {{ item.value | indent(4 + indent_length) }}{{ item.eol | default(';') }}
 {% endfor %}
 {%   if nginxv3_conf_stream_raw != none %}
     {{ nginxv3_conf_stream_raw | indent(4) }}
