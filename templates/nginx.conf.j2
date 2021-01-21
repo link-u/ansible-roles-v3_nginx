@@ -11,7 +11,7 @@
 {% endfor %}
 
 {# events コンテキスト #}
-{% set num_of_valid_items = (nginxv3_merged_conf_events | selectattr('value', 'defined') | selectattr('value', '!=', none) | length) %}
+{% set num_of_valid_items = (nginxv3_merged_conf_events | selectattr('value', 'defined') | selectattr('value', '!=', none) | list | length) %}
 {% if (num_of_valid_items != 0) or (nginxv3_conf_events_raw != none) %}
 events {
 {%   for item in nginxv3_merged_conf_events %}
@@ -29,7 +29,7 @@ events {
 {% endif %}
 
 {# http コンテキスト #}
-{% set num_of_valid_items = (nginxv3_merged_conf_http | selectattr('value', 'defined') | selectattr('value', '!=', none) | length) %}
+{% set num_of_valid_items = (nginxv3_merged_conf_http | selectattr('value', 'defined') | selectattr('value', '!=', none) | list | length) %}
 {% if (num_of_valid_items != 0) or (nginxv3_conf_http_raw != none) %}
 http {
 {%   for item in nginxv3_merged_conf_http %}
@@ -47,7 +47,7 @@ http {
 {% endif %}
 
 {# mail コンテキスト #}
-{% set num_of_valid_items = (nginxv3_merged_conf_mail | selectattr('value', 'defined') | selectattr('value', '!=', none) | length) %}
+{% set num_of_valid_items = (nginxv3_merged_conf_mail | selectattr('value', 'defined') | selectattr('value', '!=', none) | list | length) %}
 {% if (num_of_valid_items != 0) or (nginxv3_conf_mail_raw != none) %}
 mail {
 {%   for item in nginxv3_merged_conf_mail %}
@@ -65,7 +65,7 @@ mail {
 {% endif %}
 
 {# stream コンテキスト #}
-{% set num_of_valid_items = (nginxv3_merged_conf_stream | selectattr('value', 'defined') | selectattr('value', '!=', none) | length) %}
+{% set num_of_valid_items = (nginxv3_merged_conf_stream | selectattr('value', 'defined') | selectattr('value', '!=', none) | list | length) %}
 {% if (num_of_valid_items != 0) or (nginxv3_conf_stream_raw != none) %}
 stream {
 {% for item in nginxv3_merged_conf_stream %}
