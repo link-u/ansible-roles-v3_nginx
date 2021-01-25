@@ -7,5 +7,8 @@ server {
     listen {{ item.ip_and_port | string }} {{ ('backlog=' ~ (item.backlog | string)) | indent(4) }};
 {% endfor %}
 
+    ssl_certificate     /etc/nginx/ssl/dummy_example_com/rsa/fullchain.pem
+    ssl_certificate_key /etc/nginx/ssl/dummy_example_com/rsa/privkey.pem
+
     return 444;
 }
