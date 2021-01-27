@@ -22,9 +22,9 @@ virtualhost 用の conf ファイルの書き方例を載せています.
 
 また, 以下についても確認してください.
 
-1. conf ファイルは [nginxv3_vhost_src_dir](../#nginxv3_vhost_src_dir) で設定された変数のディレクトリに用意してください.
+1. conf ファイルは [nginxv3_vhost_src_dir](../README.md#nginxv3_vhost_src_dir) で設定された変数のディレクトリに用意してください.
 
-2. デプロイする conf ファイル名の一覧は変数 [nginxv3_vhost_list](../#nginxv3_vhost_list) に定義しておいて下さい.
+2. デプロイする conf ファイル名の一覧は変数 [nginxv3_vhost_list](../README.md#nginxv3_vhost_list) に定義しておいて下さい.
 
 <br>
 
