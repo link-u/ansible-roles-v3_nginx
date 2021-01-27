@@ -238,8 +238,8 @@ v3版では大きく以下の点が変更されています.
 
 * **nginxv3_vhost_list**<a name="nginxv3_vhost_list"></a>
 
-  ansible の template でデプロイします.<br>
-  そのため conf ファイル内で Jinja2 が使えます.<br>
+  デプロイするユーザ定義の vhost conf ファイル名のリストです.<br>
+  ansible の template モジュールを使ってデプロイするため conf ファイル内で Jinja2 が使用できます.<br>
   `{{ nginxv3_vhost_src_dir }}/{{ nginxv3_vhost_list[n] }}` というファイルパスに用意してください.
 
   Syntax
@@ -254,16 +254,16 @@ v3版では大きく以下の点が変更されています.
   Example
   ```yaml
   nginxv3_vhost_list:
-    - "hoge.conf"
-    - "fuga.conf"
-    - "piyo.conf"
+    - "hoge.conf.j2"
+    - "fuga.conf.j2"
+    - "piyo.conf.j2"
   ```
 
   そして, 以下のように vhost conf ファイルを用意しておく.
-  * `{{ nginxv3_vhost_src_dir }}/hoge.conf`
-  * `{{ nginxv3_vhost_src_dir }}/fuga.conf`
-  * `{{ nginxv3_vhost_src_dir }}/piyo.conf`
-  
+  * `{{ nginxv3_vhost_src_dir }}/hoge.conf.j2`
+  * `{{ nginxv3_vhost_src_dir }}/fuga.conf.j2`
+  * `{{ nginxv3_vhost_src_dir }}/piyo.conf.j2`
+
 
 <br>
 

@@ -63,7 +63,7 @@
 - name: "Set user-defined vhost config file"
   template:
     src:  "{{ nginxv3_vhost_src_dir }}/{{ item }}"
-    dest: "{{ nginxv3_conf_dir }}/{{ item }}"
+    dest: "{{ nginxv3_conf_dir }}/{{ item | regex_replace('\\.j2$', '') }}"
     mode: "0644"
   loop: "{{ nginxv3_vhost_list }}"
   notify: "nginxv3 reload nginx"
