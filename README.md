@@ -264,6 +264,9 @@ v3版では大きく以下の点が変更されています.
   * `{{ nginxv3_vhost_src_dir }}/fuga.conf.j2`
   * `{{ nginxv3_vhost_src_dir }}/piyo.conf.j2`
 
+  <br>
+
+  vhost の設定例は[こちら](./docs/vhost.md)を確認してください.
 
 <br>
 
