@@ -76,10 +76,10 @@ server {
 
 {% set dest_dir = nginxv3_ssl_confs.test_example_com.dest_dir %}
 {% for item in nginxv3_ssl_confs.test_example_com.certificate_list %}
-    ssl_certificate      {{ (dest_dir ~ '/' ~ item.crt_file) | realpath }};
-    ssl_certificate_key  {{ (dest_dir ~ '/' ~ item.key_file) | realpath }};
+    ssl_certificate      {{ dest_dir ~ '/' ~ item.crt_file }};
+    ssl_certificate_key  {{ dest_dir ~ '/' ~ item.key_file }};
 {% endfor %}
-    ssl_dhparam          {{ (dest_dir ~ '/' ~ nginxv3_ssl_confs.test_example_com.dhparam.file) | realpath }};
+    ssl_dhparam          {{ dest_dir ~ '/' ~ nginxv3_ssl_confs.test_example_com.dhparam.file }};
 
     location / {
         root   /usr/share/nginx/html/;
@@ -121,10 +121,10 @@ server {
 
 {% set dest_dir = nginxv3_ssl_confs.test_example_com.dest_dir %}
 {% for item in nginxv3_ssl_confs.test_example_com.certificate_list %}
-    ssl_certificate      {{ (dest_dir ~ '/' ~ item.crt_file) | realpath }};
-    ssl_certificate_key  {{ (dest_dir ~ '/' ~ item.key_file) | realpath }};
+    ssl_certificate      {{ dest_dir ~ '/' ~ item.crt_file) }};
+    ssl_certificate_key  {{ dest_dir ~ '/' ~ item.key_file) }};
 {% endfor %}
-    ssl_dhparam          {{ (dest_dir ~ '/' ~ nginxv3_ssl_confs.test_example_com.dhparam.file) | realpath }};
+    ssl_dhparam          {{ dest_dir ~ '/' ~ nginxv3_ssl_confs.test_example_com.dhparam.file }};
 
     index index.html index.php;
     root /var/www/php_apps;
