@@ -114,8 +114,8 @@ nginxv3_defaults_conf_http:
   - { key: "brotli_min_length", value: "1024" }
   - { key: "brotli_comp_level", value: "6" }
   - { key: "open_file_cache", value: "max=1000000" }
-  - { key: "include", value: "{{ nginxv3_conf_dir | realpath }}/*.conf", merge_mode: "append" }
   - { key: "vhost_traffic_status_zone", value: "" }
+  - { key: "include", value: "{{ nginxv3_conf_dir }}/*.conf", merge_mode: "append" }
 nginxv3_merged_conf_http: >-
   {{ (nginxv3_defaults_conf_http + nginxv3_conf_http) | combine_dict_list }}
 
