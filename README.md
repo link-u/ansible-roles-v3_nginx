@@ -591,7 +591,7 @@ http {
     - { key: "brotli_min_length", value: "1024" }
     - { key: "brotli_comp_level", value: "6" }
     - { key: "open_file_cache", value: "max=1000000" }
-    - { key: "include", value: "{{ nginxv3_conf_dir | realpath }}/*.conf", merge_mode: "append" }
+    - { key: "include", value: "{{ nginxv3_conf_dir }}/*.conf", merge_mode: "append" }
     - { key: "vhost_traffic_status_zone", value: "" }
   ```
 
