@@ -1,0 +1,5 @@
+---
+nginxv3_backlog:
+  - { ip_and_port: "443", backlog: 60000 }
+  - { ip_and_port: "127.0.0.1:8080", backlog: 100 }
+  - { ip_and_port: "[::1]:8080", backlog: 100 }
